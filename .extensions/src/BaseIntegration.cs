@@ -93,7 +93,7 @@ public class BaseIntegration : CarbonPlugin
 
 		Puts($"Tests finalized: {passedTests} / {totalTests} passed");
 
-		ServerMgr.Instance.Shutdown();
+		ConsoleSystem.Run(ConsoleSystem.Option.Server, "quit");
 		yield return null;
 	}
 
