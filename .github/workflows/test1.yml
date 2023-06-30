@@ -13,11 +13,11 @@ jobs:
       - name: Process
         shell: cmd
         run: |
-          %GITHUB_WORKSPACE%\run.bat
+          %GITHUB_WORKSPACE%\win\run.bat
           
       - name: Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: build-production-windows
+          name: test01
           path: |
-            server/main_log.txt
+            win/server/main_log.txt
