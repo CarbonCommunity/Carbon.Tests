@@ -1,0 +1,23 @@
+name: Test 1
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Process
+        shell: cmd
+        run: |
+          %GITHUB_WORKSPACE%\run.bat
+          
+      - name: Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-production-windows
+          path: |
+            server/main_log.txt
