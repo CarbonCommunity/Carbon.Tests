@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Carbon.Components;
 using Carbon.Plugins;
 using Facepunch;
-using WebSocketSharp;
+using UnityEngine;
 
 namespace Carbon.Integration;
 
@@ -24,9 +25,9 @@ public class BaseIntegration : CarbonPlugin
 		_tests.Add(test);
 	}
 
-	public override void IInit()
+	public override void Load()
 	{
-		base.IInit();
+		base.Load();
 
 		Register(Test.Make("info", "Prints information about Rust and Carbon's live version the test's running on.",
 			callback: (test, settings) =>
@@ -63,18 +64,30 @@ public class BaseIntegration : CarbonPlugin
 			}));
 
 		Install();
-		_run();
+
+		persistence.StartCoroutine(Run());
 	}
 
-	internal async void _run()
+	internal IEnumerator Run()
 	{
-		foreach(var test in _tests)
+		while (!Community.IsServerFullyInitializedCache)
 		{
-			await test.Execute(Settings);
-			await Task.Delay(500);
+			yield return null;
 		}
 
-		await Shutdown();
+		Puts($"Executing {_tests.Count:n0} tests");
+
+		foreach(var test in _tests)
+		{
+			yield return test.Execute(Settings);
+			yield return CoroutineEx.waitForSeconds(0.5f);
+		}
+
+		var execute = Task.Run(Shutdown);
+		while (!execute.IsCompleted)
+		{
+			yield return null;	
+		}
 	}
 
 	public async Task Shutdown()
@@ -83,8 +96,9 @@ public class BaseIntegration : CarbonPlugin
 		var totalTests = _tests.Count;
 
 		Puts($"Tests finalized: {passedTests} / {totalTests} passed");
-		ServerMgr.Instance.Shutdown();
 		await Task.CompletedTask;
+
+		ServerMgr.Instance.Shutdown();
 	}
 
 	public class TestSettings
@@ -102,7 +116,7 @@ public class BaseIntegration : CarbonPlugin
 
 		public string ResultMessage { get; internal set; }
 
-		public async Task Execute(TestSettings arg)
+		public IEnumerator Execute(TestSettings arg)
 		{
 			Logger.Log($"Initializing test '{Name}'..");
 			Logger.Log($" {Description}");
@@ -133,9 +147,9 @@ public class BaseIntegration : CarbonPlugin
 				}
 			}
 
-			await Task.CompletedTask;
+			yield return null;
 		}
-		public async void Message(object message)
+		public void Message(object message)
 		{
 			if(message == null)
 			{
@@ -145,7 +159,7 @@ public class BaseIntegration : CarbonPlugin
 
 			Logger.Log($" [TST-{Name}]: {message}");
 		}
-		public async void Notice(object message)
+		public void Notice(object message)
 		{
 			Logger.Log($" [TST-{Name}] [NOTICE]: {message?.ToString().ToUpper()}");
 		}

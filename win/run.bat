@@ -78,7 +78,6 @@ RustDedicated.exe -nographics -batchmode -logs -silent-crashes ^
      -server.maxplayers 1 ^
      -chat.serverlog 1 ^
 	 -global.asyncwarmup t ^
-	 -global.skipassetwarmup_crashes t ^
 	 -carbon.extdir "..\..\.tests\extensions" ^
 	 -carbon.scriptdir "..\..\.tests\plugins" ^
      +server.seed 123123 ^

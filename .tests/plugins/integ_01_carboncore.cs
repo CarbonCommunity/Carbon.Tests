@@ -5,7 +5,7 @@ namespace Carbon.Plugins;
 [Info("IntegrationTest_01_CarbonCore", "Carbon Community", "1.0.0")]
 public class IntegrationTest_01_CarbonCore : BaseIntegration
 {
-	public override TestSettings Settings => new TestSettings
+	public override TestSettings Settings => new()
 	{
 		TestTimeout = 10
 	};
