@@ -1,0 +1,26 @@
+{
+  "AutoUpdateExtHooks": true,
+  "HarmonyReference": true,
+  "ScriptWatchers": true,
+  "ScriptWatcherOption": 1,
+  "FileNameCheck": false,
+  "IsModded": true,
+  "HigherPriorityHookWarns": true,
+  "EntityMapBufferSize": 10000,
+  "FrameTickBufferSize": 1000,
+  "PlayerDefaultGroup": "default",
+  "AdminDefaultGroup": "admin",
+  "LogFileMode": 2,
+  "LogVerbosity": 0,
+  "UnityStacktrace": true,
+  "ConditionalCompilationSymbols": [
+    "CARBON",
+    "RUST"
+  ],
+  "LogSeverity": 2,
+  "PermissionSerialization": 0,
+  "Language": "en",
+  "WebRequestIp": null,
+  "oCommandChecks": true,
+  "ShowConsoleInfo": true
+}
