@@ -83,22 +83,18 @@ public class BaseIntegration : CarbonPlugin
 			yield return CoroutineEx.waitForSeconds(0.5f);
 		}
 
-		var execute = Task.Run(Shutdown);
-		while (!execute.IsCompleted)
-		{
-			yield return null;	
-		}
+		yield return Shutdown();
 	}
 
-	public async Task Shutdown()
+	public IEnumerator Shutdown()
 	{
 		var passedTests = _tests.Count(x => string.IsNullOrEmpty(x.ResultMessage));
 		var totalTests = _tests.Count;
 
 		Puts($"Tests finalized: {passedTests} / {totalTests} passed");
-		await Task.CompletedTask;
 
 		ServerMgr.Instance.Shutdown();
+		yield return null;
 	}
 
 	public class TestSettings
