@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Carbon.Components;
 using Carbon.Plugins;
 using Facepunch;
@@ -93,7 +92,8 @@ public class BaseIntegration : CarbonPlugin
 
 		Puts($"Tests finalized: {passedTests} / {totalTests} passed");
 
-		ConsoleSystem.Run(ConsoleSystem.Option.Server, "quit");
+		UnityEngine.Application.Quit();
+		// ConsoleSystem.Run(ConsoleSystem.Option.Server, "quit");
 		yield return null;
 	}
 
