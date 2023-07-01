@@ -77,7 +77,7 @@ public class BaseIntegration : CarbonPlugin
 
 		Puts($"Executing {_tests.Count:n0} tests");
 
-		foreach(var test in _tests)
+		foreach (var test in _tests)
 		{
 			yield return test.Execute(Settings);
 			yield return CoroutineEx.waitForSeconds(0.5f);
@@ -114,9 +114,9 @@ public class BaseIntegration : CarbonPlugin
 
 		public IEnumerator Execute(TestSettings arg)
 		{
-			Logger.Log($"Initializing test '{Name}'..");
-			Logger.Log($" {Description}");
-			Logger.Log(new string('.', 10));
+			Message($"Initializing test '{Name}'..");
+			Message($" {Description}");
+			Message(new string('.', 10));
 
 			using (TimeMeasure.New($"Test '{Name}'", arg.TestTimeout))
 			{
@@ -124,22 +124,22 @@ public class BaseIntegration : CarbonPlugin
 				{
 					ResultMessage = Callback(this, arg);
 
-					Logger.Log(new string('.', 10));
+					Message(new string('.', 10));
 
 					if (string.IsNullOrEmpty(ResultMessage))
 					{
-						Logger.Log($" Test '{Name}' succeeded!");
+						Message($" Test '{Name}' succeeded!");
 					}
 					else
 					{
-						Logger.Warn($" Test '{Name}' failed: {ResultMessage}");
+						Message($" Test '{Name}' failed: {ResultMessage}");
 					}
 				}
 				catch (Exception exception)
 				{
 					exception = exception.InnerException ?? exception;
-					Logger.Error($"Failed integration test '{Name}' ({exception.Message})\n{exception.StackTrace}");
-					Logger.Log(new string('.', 10));
+					Message($"Failed integration test '{Name}' ({exception.Message})\n{exception.StackTrace}");
+					Message(new string('.', 10));
 				}
 			}
 
@@ -147,17 +147,22 @@ public class BaseIntegration : CarbonPlugin
 		}
 		public void Message(object message)
 		{
-			if(message == null)
+			if (message == null)
 			{
+				Console.WriteLine(string.Empty);
 				Logger.Log(null);
 				return;
 			}
 
-			Logger.Log($" [TST-{Name}]: {message}");
+			var text = $" [TST-{Name}]: {message}";
+			Console.WriteLine(text);
+			Logger.Log(text);
 		}
 		public void Notice(object message)
 		{
-			Logger.Log($" [TST-{Name}] [NOTICE]: {message?.ToString().ToUpper()}");
+			var text = $" [TST-{Name}] [NOTICE]: {message?.ToString().ToUpper()}";
+			Console.WriteLine(text);
+			Logger.Log(text);
 		}
 		public void Break()
 		{
@@ -169,7 +174,7 @@ public class BaseIntegration : CarbonPlugin
 			return new Test
 			{
 				Name = name,
-				Description	= description,
+				Description = description,
 				SuccessMessage = success,
 				FailureMessage = failure,
 				Callback = callback
