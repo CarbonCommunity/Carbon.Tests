@@ -13,7 +13,8 @@ jobs:
       - name: Process
         shell: cmd
         run: |
-          %GITHUB_WORKSPACE%\win\run.bat
+          cd %GITHUB_WORKSPACE%\win
+          run.bat
           
       - name: Artifacts
         uses: actions/upload-artifact@v3
