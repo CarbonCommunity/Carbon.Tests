@@ -1,7 +1,7 @@
 @echo off
 
 if "%1" EQU "" (
-	set TAG=preview
+	set TAG=edge
 ) else (
 	set TAG=%1
 )
