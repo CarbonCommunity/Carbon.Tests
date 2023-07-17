@@ -77,9 +77,10 @@ RustDedicated.exe -nographics -batchmode -logs -silent-crashes ^
                   -server.saveinterval 400 ^
                   -server.maxplayers 1 ^
                   -chat.serverlog 1 ^
-                  -global.asyncwarmup t ^
+                  -global.asyncwarmup 1 ^
+				  +carbon.onserverinit "restart 10" ^
                   +server.seed 123123 ^
-                  +server.worldsize 3000 ^
+                  +server.worldsize 1500 ^
                   -logfile "main_log.txt" ^
 			 
 exit /b 0
