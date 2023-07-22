@@ -63,11 +63,11 @@ public class BaseIntegration : CarbonPlugin
 			}));
 
 		Install();
-	}
 
-	private void OnServerInitialized()
-	{
-		persistence.StartCoroutine(Run());
+		Community.Runtime.Events.Subscribe(API.Events.CarbonEvent.OnServerInitialized, args =>
+		{
+			persistence.StartCoroutine(Run());
+		});
 	}
 
 	internal IEnumerator Run()
