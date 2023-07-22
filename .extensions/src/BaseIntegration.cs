@@ -64,7 +64,7 @@ public class BaseIntegration : CarbonPlugin
 
 		Install();
 
-		persistence.StartCoroutine(Run());
+		ServerMgr.Instance.StartCoroutine(Run());
 	}
 
 	internal IEnumerator Run()
@@ -92,8 +92,7 @@ public class BaseIntegration : CarbonPlugin
 
 		Puts($"Tests finalized: {passedTests} / {totalTests} passed");
 
-		UnityEngine.Application.Quit();
-		// ConsoleSystem.Run(ConsoleSystem.Option.Server, "quit");
+		ConsoleSystem.Run(ConsoleSystem.Option.Server, "quit");
 		yield return null;
 	}
 
