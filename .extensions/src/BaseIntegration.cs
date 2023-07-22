@@ -63,8 +63,11 @@ public class BaseIntegration : CarbonPlugin
 			}));
 
 		Install();
+	}
 
-		ServerMgr.Instance.StartCoroutine(Run());
+	private void OnServerInitialized()
+	{
+		persistence.StartCoroutine(Run());
 	}
 
 	internal IEnumerator Run()
