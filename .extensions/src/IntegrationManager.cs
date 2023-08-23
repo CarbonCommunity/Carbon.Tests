@@ -85,6 +85,8 @@ public class IntegrationManager
 
                 var result = await test.Task;
 
+                Log ( " into it" );
+
                 //
                 // Handle errors
                 //
@@ -123,11 +125,16 @@ public class IntegrationManager
 
                     case Test.WaitUntil waitUntil:
                         TimeSince start = 0;
+                        Log ( " wait until" );
 
                         while (!waitUntil.Finalized && !waitUntil.TimedOut)
                         {
+                            Log ( " ping" );
+
                             if (start >= waitUntil.WaitTimeout)
                             {
+                                Log ( " timed out" );
+
                                 waitUntil.Timeout ();
                             }
 
