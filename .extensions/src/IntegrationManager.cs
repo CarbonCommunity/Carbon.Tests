@@ -127,6 +127,8 @@ public class IntegrationManager
                             {
                                 waitUntil.Timeout ();
                             }
+
+                            continue;
                         }
                         break;
                 }
