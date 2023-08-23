@@ -1,11 +1,9 @@
 ﻿using Carbon.Extensions;
-using Carbon.Plugins;
 using Oxide.Core.Plugins;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
-using static ProtoBuf.ItemCrafter;
 
 namespace Carbon.Integrations;
 
@@ -16,38 +14,42 @@ public class IntegrationManager
     public readonly Dictionary<Plugin, List<Test>> Plugins = new ();
     public readonly object [] Arg = new object [ 1 ];   
 
-    public const float Timeout = 0.5f;
+    public const float Timeout = 0.25f;
 
     public static void Log ( object message )
     {
         Logger.Log ( message );
+        Console.WriteLine ( $"[INFO] {message}" );
     }
     public static void Warn ( object message )
     {
         Logger.Warn ( message );
+        Console.WriteLine ( $"[WARN] {message}" );
     }
     public static void Error ( object message, Exception ex = null)
     {
         Logger.Error ( message, ex );
+        Console.WriteLine ( $"[ERRO] {message}" );
     }
 
-    public void RegisterTest<T> ( Plugin plugin, T test, MethodInfo source ) where T : Test
+    public void RegisterTest<T> ( Plugin plugin, T test, MethodInfo origin ) where T : Test
     {
         if (!Plugins.TryGetValue ( plugin, out var tests ))
         {
             Plugins.Add ( plugin, tests = new () );
         }
 
-        Log ( $"Found '{plugin.Name} by {plugin.Author}' test on method '{source.Name}': {typeof(T).Name}" );
+        Log ( $"Installed '{origin.Name}' ({test.GetType ().Name}) for plugin '{plugin.Name} by {plugin.Author}'" );
 
         tests.Add ( test );
 
+        test.Origin = origin;
         test.Task = new System.Threading.Tasks.Task<object> ( () =>
         {
             try
             {
                 Arg [ 0 ] = test;
-                return source?.Invoke ( plugin, Arg );
+                return origin?.Invoke ( plugin, Arg );
             }
             catch (Exception ex)
             {
@@ -78,6 +80,8 @@ public class IntegrationManager
                     break;
                 }
 
+                Warn ( $" Executing task '{test.Origin.Name}' {test.GetType().Name}" );
+
                 var result = await test.Task;
 
                 //
@@ -88,7 +92,8 @@ public class IntegrationManager
                     if (test.HasErrored)
                     {
                         hasEnded = true;
-                        break;
+                        Log ( " failure." );
+                        continue;
                     }
                 }
 
@@ -107,7 +112,6 @@ public class IntegrationManager
                             if (assert.CancelOnInvalid)
                             {
                                 hasEnded = true;
-                                break;
                             }
                         }
                         else
@@ -126,6 +130,8 @@ public class IntegrationManager
                         }
                         break;
                 }
+
+                Warn ( " done." );
             }
         }
 

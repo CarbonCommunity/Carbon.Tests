@@ -1,5 +1,6 @@
 ﻿using K4os.Compression.LZ4.Encoders;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Carbon.Integrations;
@@ -9,6 +10,7 @@ public class Test : Attribute
 {
     public bool CancelOnError = false;
 
+    internal MethodInfo Origin;
     internal bool HasSuccess;
     internal bool HasErrored;
     internal Task<object> Task;
