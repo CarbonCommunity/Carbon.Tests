@@ -27,7 +27,7 @@
 
 	<ItemGroup Condition=" '$(Configuration)' == 'Carbon' Or '$(Configuration)' == 'Host' ">
 		<PackageReference Include="Lib.Harmony" Version="2.2.2" />
-		<PackageReference Include="Carbon.Community" Version="*" />
+		<PackageReference Include="Carbon.Community" Version="0.2023.3222" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(Configuration)' == 'Oxide' Or '$(Configuration)' == 'Host' ">
@@ -37,11 +37,14 @@
 	<ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.1" />
     <PackageReference Include="MySql.Data" Version="8.0.33" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="WebSocketSharp-netstandard" Version="1.0.1" />
   </ItemGroup>
 
 	<ItemGroup>
-	  <Reference Include="Assembly-CSharp">
+    <None Include="..\win\server\carbon\plugins\*" />
+
+    <Reference Include="Assembly-CSharp">
 	    <HintPath>..\..\Carbon.Core\Rust\windows\RustDedicated_Data\Managed\Assembly-CSharp.dll</HintPath>
 	  </Reference>
 	  <Reference Include="Assembly-CSharp-firstpass">

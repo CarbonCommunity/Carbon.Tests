@@ -1,7 +1,7 @@
 @echo off
 
 if "%1" EQU "" (
-	set TAG=edge
+	set TAG=rustbeta_staging
 ) else (
 	set TAG=%1
 )
@@ -13,7 +13,7 @@ if "%TAG%" EQU "production" (
 )
 
 if "%2" EQU "" (
-	set BRANCH=public
+	set BRANCH=staging
 ) else (
 	set BRANCH=%2
 )
@@ -82,6 +82,7 @@ RustDedicated.exe -nographics -batchmode -logs -silent-crashes ^
 				  +carbon.onserverinit "restart 10" ^
                   +server.seed 123123 ^
                   +server.worldsize 1500 ^
+				  +test.protocol "https://github.com/CarbonCommunity/Carbon.Core/releases/download/rustbeta_staging_build/Carbon.Windows.Debug.info" ^
                   -logfile "main_log.txt" ^
 			 
 exit /b 0
