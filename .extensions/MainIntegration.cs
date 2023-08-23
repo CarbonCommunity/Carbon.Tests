@@ -6,6 +6,7 @@ using System.Net;
 
 namespace Carbon.Integrations;
 
+[Info("MainIntegration", "Carbon Community", "1.0.0")]
 public class MainIntegration : CarbonPlugin
 {
     public string ProtocolSource = CommandLineEx.GetArgumentResult ( "+test.protocol" );
