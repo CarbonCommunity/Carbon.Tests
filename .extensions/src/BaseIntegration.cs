@@ -7,9 +7,9 @@ using Carbon.Plugins;
 using Facepunch;
 using UnityEngine;
 
-namespace Carbon.Integration;
+namespace Carbon.Integrations;
 
-public class BaseIntegration : CarbonPlugin
+public class BaseIntegration
 {
 	public virtual TestSettings Settings { get; } = new();
 
