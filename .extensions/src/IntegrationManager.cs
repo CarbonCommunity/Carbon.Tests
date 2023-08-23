@@ -12,9 +12,10 @@ public class IntegrationManager
     public readonly static IntegrationManager Singleton = new ();
 
     public readonly Dictionary<Plugin, List<Test>> Plugins = new ();
-    public readonly object [] Arg = new object [ 1 ];   
+    public readonly object [] Arg = new object [ 1 ];
 
     public const float Timeout = 0.25f;
+    public const float Frequency = 0.1f;
 
     public static void Log ( object message )
     {
@@ -121,6 +122,7 @@ public class IntegrationManager
                         break;
                     case Test.WaitUntil waitUntil:
                         var start = new TimeSince ();
+
                         while (!waitUntil.Finalized && !waitUntil.TimedOut)
                         {
                             if (start >= waitUntil.WaitTimeout)
@@ -128,7 +130,7 @@ public class IntegrationManager
                                 waitUntil.Timeout ();
                             }
 
-                            continue;
+                            await AsyncEx.WaitForSeconds ( Frequency );
                         }
                         break;
                 }
