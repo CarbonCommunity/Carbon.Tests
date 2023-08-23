@@ -120,8 +120,9 @@ public class IntegrationManager
                             test.Succeed ();
                         }
                         break;
+
                     case Test.WaitUntil waitUntil:
-                        var start = new TimeSince ();
+                        TimeSince start = 0;
 
                         while (!waitUntil.Finalized && !waitUntil.TimedOut)
                         {
