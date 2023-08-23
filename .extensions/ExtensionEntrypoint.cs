@@ -30,6 +30,8 @@ public class ExtensionEntrypoint : ICarbonExtension
                     IsCoreMod = true
                 } );
 
+				IntegrationManager.Singleton.ResetTests ();
+
                 foreach (var package in ModLoader.LoadedPackages)
 				{
 					foreach (var plugin in package.Plugins)

@@ -2,6 +2,7 @@
 using Oxide.Core.Plugins;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -17,22 +18,47 @@ public class IntegrationManager
     public const float Timeout = 0.25f;
     public const float Frequency = 0.1f;
 
+    internal readonly Stopwatch Stopwatch = new ();
+
     public static void Log ( object message )
     {
         Logger.Log ( message );
-        Console.WriteLine ( $"[INFO] {message}" );
     }
     public static void Warn ( object message )
     {
         Logger.Warn ( message );
-        Console.WriteLine ( $"[WARN] {message}" );
     }
     public static void Error ( object message, Exception ex = null)
     {
         Logger.Error ( message, ex );
-        Console.WriteLine ( $"[ERRO] {message}" );
     }
 
+    public async Task<object> Create<T>(Plugin plugin, T test, MethodInfo origin) where T: Test
+    {
+        try
+        {
+            Arg [ 0 ] = test;
+            var result = origin?.Invoke ( plugin, Arg );
+            await Task.CompletedTask;
+            return result;
+        }
+        catch (Exception ex)
+        {
+            Error ( $"Test on plugin '{plugin.Name} by {plugin.Author}' failed", ex );
+            test.HasErrored = true;
+            return null;
+        }
+    }
+
+    public void ResetTests ()
+    {
+        foreach(var plugin in Plugins)
+        {
+            plugin.Value.Clear ();
+        }
+
+        Plugins.Clear ();
+    }
     public void RegisterTest<T> ( Plugin plugin, T test, MethodInfo origin ) where T : Test
     {
         if (!Plugins.TryGetValue ( plugin, out var tests ))
@@ -45,20 +71,7 @@ public class IntegrationManager
         tests.Add ( test );
 
         test.Origin = origin;
-        test.Task = new System.Threading.Tasks.Task<object> ( () =>
-        {
-            try
-            {
-                Arg [ 0 ] = test;
-                return origin?.Invoke ( plugin, Arg );
-            }
-            catch (Exception ex)
-            {
-                Error ( $"Test on plugin '{plugin.Name} by {plugin.Author}' failed", ex );
-                test.HasErrored = true;
-                return null;
-            }
-        } );
+        test.Task = Create ( plugin, test, origin );
     }
 
     public async Task<bool> ExecuteTests ()
@@ -81,11 +94,19 @@ public class IntegrationManager
                     break;
                 }
 
-                Warn ( $" Executing task '{test.Origin.Name}' {test.GetType().Name}" );
+                Warn ( $" task '{test.Origin.Name}' [{test.GetType().Name}] - {plugin.Key.Name} v{plugin.Key.Version} by {plugin.Key.Author}" );
+
+                Stopwatch.Reset ();
+                Stopwatch.Start ();
 
                 var result = await test.Task;
 
-                Log ( " into it" );
+                if (Stopwatch.ElapsedMilliseconds > 0)
+                {
+                    Warn ( $" callback took {Stopwatch.ElapsedMilliseconds}ms." );
+                }
+
+                Stopwatch.Stop ();
 
                 //
                 // Handle errors
@@ -95,7 +116,7 @@ public class IntegrationManager
                     if (test.HasErrored)
                     {
                         hasEnded = true;
-                        Log ( " failure." );
+                        Error ( "   failure." );
                         continue;
                     }
                 }
@@ -110,30 +131,28 @@ public class IntegrationManager
                     case Test.Assert assert:
                         if (!booleanResult)
                         {
-                            test.Fail ( $"Assert result '{booleanResult}' when expected true" );
+                            test.Fail ( $" assert result '{booleanResult}' when expected true." );
 
                             if (assert.CancelOnInvalid)
                             {
                                 hasEnded = true;
+                                Log ( "   success." );
                             }
                         }
                         else
                         {
                             test.Succeed ();
+                            Log ( "   success." );
                         }
                         break;
 
                     case Test.WaitUntil waitUntil:
                         TimeSince start = 0;
-                        Log ( " wait until" );
-
                         while (!waitUntil.Finalized && !waitUntil.TimedOut)
                         {
-                            Log ( " ping" );
-
                             if (start >= waitUntil.WaitTimeout)
                             {
-                                Log ( " timed out" );
+                                Error ( $" timed out after ({((start - 0) * 1000):0.00}ms) - thrsh. {waitUntil.WaitTimeout * 1000:0}ms." );
 
                                 waitUntil.Timeout ();
                             }
@@ -143,7 +162,7 @@ public class IntegrationManager
                         break;
                 }
 
-                Warn ( " done." );
+                Warn ( "   done." );
             }
         }
 
