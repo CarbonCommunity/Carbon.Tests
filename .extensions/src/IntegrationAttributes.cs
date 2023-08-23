@@ -1,4 +1,4 @@
-﻿using K4os.Compression.LZ4.Encoders;
+﻿using Carbon.Extensions;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -75,7 +75,7 @@ public class Test : Attribute
     [AttributeUsage ( AttributeTargets.Method )]
     public class WaitUntil : Test
     {
-        public float WaitTimeout = 2f;
+        public float WaitTimeout = CommandLineEx.GetArgumentResult ( "+waituntil.timeout", "0.2" ).ToFloat();
 
         internal bool Finalized;
         internal bool TimedOut;
