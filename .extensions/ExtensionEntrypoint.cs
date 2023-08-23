@@ -14,6 +14,8 @@ public class ExtensionEntrypoint : ICarbonExtension
 {
 	public void OnLoaded ( EventArgs args )
 	{
+		IntegrationManager.Log ( $"Booting" );
+
 		Community.Runtime.Events.Subscribe ( API.Events.CarbonEvent.OnServerInitialized, async arg =>
 		{
 			try
