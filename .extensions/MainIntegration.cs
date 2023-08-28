@@ -49,10 +49,12 @@ public class MainIntegration : CarbonPlugin
         // IntegrationManager.Log ( $"     Platform:    {Community.Runtime.Analytics.Platform}" );
     }
 
-    [Test.Assert ( CancelOnInvalid = true, CancelOnError = true )]
-    public bool RunsLatestProtocol ()
-    {
-        var liveProtocol = JObject.Parse ( new WebClient ().DownloadString ( ProtocolSource ) ) [ "Protocol" ].Value<string> ();
-        return Test.Assert.IsTrue ( Community.Runtime.Analytics.Protocol == liveProtocol, "Protocol valid", "Protocol invalid" );
-    }
+	[Test.Assert(CancelOnInvalid = true, CancelOnError = true)]
+	public bool RunsLatestProtocol()
+	{
+		var liveProtocol = JObject.Parse(new WebClient().DownloadString(ProtocolSource))["Protocol"].Value<string>();
+		IntegrationManager.Log($"{Community.Runtime.Analytics.Protocol} -> {liveProtocol}");
+
+		return Test.Assert.IsTrue(Community.Runtime.Analytics.Protocol == liveProtocol, "Protocol valid", "Protocol invalid");
+	}
 }

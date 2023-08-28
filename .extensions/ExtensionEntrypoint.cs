@@ -14,58 +14,68 @@ public class ExtensionEntrypoint : ICarbonExtension
 {
 	public void OnLoaded ( EventArgs args )
 	{
-		IntegrationManager.Log ( $"Booting" );
+		IntegrationManager.Singleton.Boot();
 
 		Community.Runtime.Events.Subscribe ( API.Events.CarbonEvent.OnServerInitialized, async arg =>
 		{
 			try
-            {
-                IntegrationManager.Log ( $"Intializing Carbon.Integrations" );
+			{
+				IntegrationManager.Singleton.Initialize();
 
-                const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
+				const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
 
-                ModLoader.InitializePlugin ( typeof ( MainIntegration ), out _, new ModLoader.ModPackage
-                {
-                    Name = "Carbon.Integrations",
-                    IsCoreMod = true
-                } );
+				var newPackage = new ModLoader.ModPackage
+				{
+					Name = "Carbon.Integrations",
+					IsCoreMod = true
+				};
 
-				IntegrationManager.Singleton.ResetTests ();
+				ModLoader.LoadedPackages.Add(newPackage);
+				ModLoader.InitializePlugin(typeof(MainIntegration), out _, newPackage);
 
-                foreach (var package in ModLoader.LoadedPackages)
+				IntegrationManager.Singleton.ResetTests();
+
+				foreach (var package in ModLoader.LoadedPackages)
 				{
 					foreach (var plugin in package.Plugins)
 					{
-						var methods = plugin.Type.GetMethods ( flags );
+						var methods = plugin.Type.GetMethods(flags);
 
 						foreach (var method in methods)
 						{
-							var test = method.GetCustomAttribute<Test> ();
+							var test = method.GetCustomAttribute<Test>();
 
 							if (test == null)
 							{
 								continue;
 							}
 
-							IntegrationManager.Singleton.RegisterTest ( plugin, test, method );
+							IntegrationManager.Singleton.RegisterTest(plugin, test, method);
 						}
 					}
 				}
 
-				var success = await IntegrationManager.Singleton.ExecuteTests ();
+				var result = await IntegrationManager.Singleton.ExecuteTests();
+				var total = result.Passed.Count + result.Failed.Count;
 
-				if (success)
+				if (result.Passed.Count >= result.Failed.Count)
 				{
-					IntegrationManager.Log ( $"The run has been a success!" );
+					IntegrationManager.Warn($" There have been equally the same passed as failed amounts of tests: {result.Passed.Count:n0} / {total:n0} passed [out of {total} total]");
+				}
+				else if (result.Passed.Count > result.Failed.Count)
+				{
+					IntegrationManager.Warn($" The run has been a success: {result.Passed.Count:n0} / {total:n0} passed [out of {total} total]");
 				}
 				else
 				{
-                    IntegrationManager.Warn ( $"The run hasn't been a success." );
-                }
-            }
+					IntegrationManager.Warn($" The run has failed: {result.Failed.Count:n0} / {total:n0} failed [out of {total} total]");
+				}
+
+				ConsoleSystem.Run(ConsoleSystem.Option.Server, "quit");
+			}
 			catch (Exception ex)
 			{
-				Logger.Error ( "Failed doing something wild.", ex );
+				Logger.Error("Failed doing something wild.", ex);
 			}
 		} );
 	}
