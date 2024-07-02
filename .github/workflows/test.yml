@@ -1,4 +1,4 @@
-name: Test 1
+name: Integration Run
 
 on:
   workflow_dispatch:
@@ -19,6 +19,7 @@ jobs:
       - name: Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: test01
+          name: logs
           path: |
             win/server/main_log.txt
+            win/server/carbon/plugins/IntegrationTests.cs
