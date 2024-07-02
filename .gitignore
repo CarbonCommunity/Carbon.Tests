@@ -1,4 +1,10 @@
-win/server/
-!win/server/carbon/
-win/server/carbon/*
-win/steam
+/win/server/*
+!/win/server/carbon/
+/win/server/carbon/managed
+/win/server/carbon/modules
+/win/server/carbon/lang
+/win/server/carbon/logs
+/win/server/carbon/data
+/win/server/carbon/config
+/win/server/carbon/native
+/win/steam
