@@ -1,26 +1,63 @@
 {
-  "AutoUpdateExtHooks": true,
-  "HarmonyReference": true,
-  "ScriptWatchers": true,
-  "ScriptWatcherOption": 1,
-  "FileNameCheck": false,
   "IsModded": true,
-  "HigherPriorityHookWarns": true,
-  "EntityMapBufferSize": 10000,
-  "FrameTickBufferSize": 1000,
-  "PlayerDefaultGroup": "default",
-  "AdminDefaultGroup": "admin",
-  "LogFileMode": 2,
-  "LogVerbosity": 0,
-  "UnityStacktrace": true,
-  "ConditionalCompilationSymbols": [
-    "CARBON",
-    "RUST"
+  "Prefixes": [
+    {
+      "Value": "/",
+      "PrintToChat": false,
+      "PrintToConsole": false,
+      "SuggestionAuthLevel": 2
+    }
   ],
-  "LogSeverity": 2,
-  "PermissionSerialization": 0,
+  "Aliases": {
+    "carbon": "c.version",
+    "harmony.load": "c.harmonyload",
+    "harmony.unload": "c.harmonyunload"
+  },
+  "Rcon": false,
   "Language": "en",
   "WebRequestIp": null,
-  "oCommandChecks": true,
-  "ShowConsoleInfo": true
+  "Watchers": {
+    "ScriptWatchers": true,
+    "ZipScriptWatchers": true,
+    "ScriptWatcherOption": 0,
+    "HarmonyWatchers": true,
+    "ModuleWatchers": true,
+    "ExtensionWatchers": true
+  },
+  "Permissions": {
+    "PlayerDefaultGroup": "default",
+    "AdminDefaultGroup": "admin",
+    "BypassAdminCooldowns": false,
+    "PermissionSerialization": 0
+  },
+  "Analytics": {
+    "Enabled": false
+  },
+  "SelfUpdating": {
+    "Enabled": true
+  },
+  "Debugging": {
+    "ScriptDebuggingOrigin": "",
+    "HookLagSpikeThreshold": 1000
+  },
+  "Logging": {
+    "LogSplitSize": 2.5,
+    "LogSeverity": 2,
+    "LogFileMode": 2,
+    "LogVerbosity": 0,
+    "CommandSuggestions": true
+  },
+  "Profiler": {
+    "RecordingWarnings": true
+  },
+  "Compiler": {
+    "UnloadOnFailure": false,
+    "ConditionalCompilationSymbols": [
+      "CARBON",
+      "RUST"
+    ]
+  },
+  "Misc": {
+    "ShowConsoleInfo": true
+  }
 }

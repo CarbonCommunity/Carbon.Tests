@@ -1,7 +1,7 @@
 @echo off
 
 if "%1" EQU "" (
-	set TAG=rustbeta_staging
+	set TAG=edge
 ) else (
 	set TAG=%1
 )
@@ -13,7 +13,7 @@ if "%TAG%" EQU "production" (
 )
 
 if "%2" EQU "" (
-	set BRANCH=staging
+	set BRANCH=public
 ) else (
 	set BRANCH=%2
 )
@@ -70,7 +70,7 @@ steamcmd.exe +force_install_dir "%server%" ^
 cd "%server%"
 echo Staring server...		
 RustDedicated.exe -nographics -batchmode -logs -silent-crashes ^
-                  -server.hostname "Legit Server" ^
+                  -server.hostname "Carbon Test Server" ^
                   -server.identity "main" ^
                   -server.port 29850 ^
                   -server.queryport 29851 ^
@@ -78,11 +78,10 @@ RustDedicated.exe -nographics -batchmode -logs -silent-crashes ^
                   -server.maxplayers 1 ^
                   -chat.serverlog 1 ^
                   -global.asyncwarmup 1 ^
+                  -global.skipassetwarmup_crashes 1 ^
 				  -aimanager.nav_disable 1 ^
-				  +carbon.onserverinit "restart 10" ^
                   +server.seed 123123 ^
                   +server.worldsize 1500 ^
-				  +test.protocol "https://github.com/CarbonCommunity/Carbon.Core/releases/download/rustbeta_staging_build/Carbon.Windows.Debug.info" ^
                   -logfile "main_log.txt" ^
 			 
 exit /b 0
