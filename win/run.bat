@@ -79,7 +79,7 @@ RustDedicated.exe -nographics -batchmode -logs -silent-crashes ^
                   -chat.serverlog 1 ^
                   -global.asyncwarmup 1 ^
                   -global.skipassetwarmup_crashes 1 ^
-				  -aimanager.nav_disable 1 ^
+		  -aimanager.nav_disable 1 ^
                   +server.seed 123123 ^
                   +server.worldsize 1500 ^
                   -logfile "main_log.txt" ^
