@@ -1,4 +1,5 @@
 {
+  "DeveloperMode": false,
   "IsModded": true,
   "Prefixes": [
     {
@@ -9,9 +10,7 @@
     }
   ],
   "Aliases": {
-    "carbon": "c.version",
-    "harmony.load": "c.harmonyload",
-    "harmony.unload": "c.harmonyunload"
+    "carbon": "c.version"
   },
   "Rcon": false,
   "Language": "en",
@@ -20,13 +19,13 @@
     "ScriptWatchers": true,
     "ZipScriptWatchers": true,
     "ScriptWatcherOption": 0,
-    "HarmonyWatchers": true,
     "ModuleWatchers": true,
     "ExtensionWatchers": true
   },
   "Permissions": {
     "PlayerDefaultGroup": "default",
     "AdminDefaultGroup": "admin",
+    "ModeratorDefaultGroup": "moderator",
     "BypassAdminCooldowns": false,
     "PermissionSerialization": 0
   },
@@ -39,6 +38,27 @@
   "Debugging": {
     "ScriptDebuggingOrigin": "",
     "HookLagSpikeThreshold": 1000
+  },
+  "Processors": {
+    "ScriptProcessingRate": 0.2,
+    "ZipScriptProcessingRate": 0.5
+  },
+  "Publicizer": {
+    "PublicizedAssemblies": [
+      "Assembly-CSharp.dll",
+      "Facepunch.Console.dll",
+      "Facepunch.Network.dll",
+      "Facepunch.Nexus.dll",
+      "Rust.Clans.Local.dll",
+      "Rust.Harmony.dll",
+      "Rust.Global.dll",
+      "Rust.Data.dll"
+    ],
+    "PublicizerMemberIgnores": [
+      "^HiddenValueBase$",
+      "^HiddenValue`1$",
+      "^Pool$"
+    ]
   },
   "Logging": {
     "LogSplitSize": 2.5,
@@ -54,7 +74,8 @@
     "UnloadOnFailure": false,
     "ConditionalCompilationSymbols": [
       "CARBON",
-      "RUST"
+      "RUST",
+      "OXIDE_PUBLICIZED"
     ]
   },
   "Misc": {
