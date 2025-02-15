@@ -25,7 +25,7 @@ public partial class Tests : CarbonPlugin
 			Integrations.EnqueueBed(Integrations.Get(type.Name, type, Activator.CreateInstance(type)));
 		}
 
-		// Integrations.EnqueueBed(Integrations.Get(nameof(Cleanup), typeof(Cleanup), new Cleanup()));
+		Integrations.EnqueueBed(Integrations.Get(nameof(Cleanup), typeof(Cleanup), new Cleanup()));
 
 		Logger.Log(string.Empty);
 
