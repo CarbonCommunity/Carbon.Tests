@@ -7,4 +7,5 @@
 /win/server/carbon/data
 /win/server/carbon/config
 /win/server/carbon/native
+/win/server/carbon/plugins/debug
 /win/steam
